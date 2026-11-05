@@ -61,6 +61,7 @@ test("the CLI Hub keeps its monospace, square-corner visual system", async () =>
   assert.match(html, /body\s*\{[^}]*font:[^}]*var\(--mono\)/s);
   assert.match(html, /\.btn\s*\{[^}]*border-radius:\s*0/s);
   assert.match(html, /\.searchbox,\.filter,\.search-submit\s*\{[^}]*border-radius:\s*0/s);
+  assert.match(html, /button,\[role="button"\],input\[type="button"\],input\[type="submit"\],input\[type="reset"\].*?\{border-radius:\s*0!important\}/s);
 });
 
 test("the tool submission action points to the repository issue template", async () => {
