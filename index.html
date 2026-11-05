@@ -21,6 +21,8 @@ a{color:inherit;text-decoration:none}
 button,a,input,select{touch-action:manipulation}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
 button{cursor:pointer}
+/* Enforce perfectly square corners on every native and button-like control. */
+button,[role="button"],input[type="button"],input[type="submit"],input[type="reset"],.btn,.submit-tool,.icon-button,.shortcut,.search-submit,.back{border-radius:0!important}
 .layout{min-height:100vh;display:grid;grid-template-columns:230px minmax(0,1fr);grid-template-rows:64px 1fr auto;max-width:1680px;margin:0 auto;border:1px solid var(--line);background:linear-gradient(135deg,#070b13,#05070d 55%)}
 .sidebar{grid-column:1;grid-row:1/4;border-right:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;min-height:100vh}
 .brand{display:flex;align-items:center;gap:12px;padding:4px 8px 26px;border-bottom:1px solid var(--line);font-weight:800;font-size:20px;letter-spacing:-1px}
