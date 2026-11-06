@@ -142,7 +142,7 @@ test("navigation exposes 50 unique pages across 11 groups", async () => {
   assert.ok(match, "page definitions should be present");
   const pages = JSON.parse(match[1]);
   assert.equal(pages.length, 51);
-  assert.equal(new Set(pages.map(page => page[0])).size, 50);
+  assert.equal(new Set(pages.map(page => page[0])).size, 51);
   assert.equal(new Set(pages.map(page => page[2])).size, 11);
   assert.match(html, /id="nav-search"/);
   assert.match(html, /function buildNavigation\(\)/);
