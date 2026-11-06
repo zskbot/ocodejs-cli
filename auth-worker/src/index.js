@@ -117,7 +117,7 @@ async function githubProfile(token) {
 async function handle(request, env) {
   const url = new URL(request.url);
   const path = url.pathname;
-  if (path === "/health" && request.method === "GET") return json({ ok: true, service: "ocodejs-auth-worker" });
+  if (path === "/health" && request.method === "GET") return json({ ok: true, service: "ocodejs-auth-worker", patConfigured: Boolean(env.DB && env.SESSION_SECRET && env.TOKEN_ENCRYPTION_KEY), oauthConfigured: Boolean(env.GITHUB_CLIENT_ID && env.GITHUB_CLIENT_SECRET) });
   if (request.method === "OPTIONS") return new Response(null, { status: 204 });
   if (path.startsWith("/auth/") && !(await rateLimit(request, env, 900000, 20))) return json({ error: "rate_limit_exceeded" }, 429);
   if (path.startsWith("/api/") && !(await rateLimit(request, env, 60000, 60))) return json({ error: "rate_limit_exceeded" }, 429);
