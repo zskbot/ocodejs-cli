@@ -67,12 +67,12 @@ function corsHeaders(request, env) {
   if (origin !== env.APP_ORIGIN) return null;
   return { "Access-Control-Allow-Origin": env.APP_ORIGIN, "Access-Control-Allow-Credentials": "true", "Access-Control-Allow-Headers": "Content-Type, X-Ocode-CSRF", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Vary": "Origin" };
 }
-async function rateLimit(request, env) {
+async function rateLimit(request, env, windowMs = 900000, maximum = 20) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
   const key = await sha256(ip);
-  const window = Math.floor(Date.now() / 900000);
+  const window = Math.floor(Date.now() / windowMs);
   const row = await env.DB.prepare("INSERT INTO auth_rate_limits(key_hash, window_id, hits) VALUES(?, ?, 1) ON CONFLICT(key_hash) DO UPDATE SET window_id=excluded.window_id, hits=CASE WHEN auth_rate_limits.window_id=excluded.window_id THEN auth_rate_limits.hits+1 ELSE 1 END RETURNING hits").bind(key, window).first();
-  return Number(row?.hits || 0) <= 20;
+  return Number(row?.hits || 0) <= maximum;
 }
 async function githubRequest(path, token, init = {}) {
   const response = await fetch("https://api.github.com" + path, {
@@ -119,7 +119,8 @@ async function handle(request, env) {
   const path = url.pathname;
   if (path === "/health" && request.method === "GET") return json({ ok: true, service: "ocodejs-auth-worker" });
   if (request.method === "OPTIONS") return new Response(null, { status: 204 });
-  if (path.startsWith("/auth/") && !(await rateLimit(request, env))) return json({ error: "rate_limit_exceeded" }, 429);
+  if (path.startsWith("/auth/") && !(await rateLimit(request, env, 900000, 20))) return json({ error: "rate_limit_exceeded" }, 429);
+  if (path.startsWith("/api/") && !(await rateLimit(request, env, 60000, 60))) return json({ error: "rate_limit_exceeded" }, 429);
   if (path === "/auth/github" && request.method === "GET") {
     if (!env.GITHUB_CLIENT_ID || !env.GITHUB_CLIENT_SECRET) return json({ error: "github_oauth_not_configured" }, 503);
     const state = randomToken();
