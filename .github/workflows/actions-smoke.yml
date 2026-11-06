@@ -1,0 +1,21 @@
+name: Actions startup smoke test
+
+on:
+  push:
+    branches:
+      - diagnostics/actions-startup-smoke
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Verify GitHub-hosted runner startup
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Confirm runner execution
+        run: |
+          echo "GitHub Actions runner started successfully."
+          echo "Repository: ${GITHUB_REPOSITORY}"
+          echo "Commit: ${GITHUB_SHA}"
