@@ -8,7 +8,8 @@
     "test": "node --test",
     "auth:dev": "npm --prefix auth-server run dev",
     "auth:start": "npm --prefix auth-server start",
-    "auth:test": "npm --prefix auth-server test"
+    "auth:test": "npm --prefix auth-server test",
+    "auth:worker:test": "node --test auth-worker/test/*.test.mjs"
   },
   "engines": {
     "node": ">=20"
