@@ -99,9 +99,16 @@ Community library cards load their brand marks from Simple Icons using the corre
 The **Marketplace** page links to the official Visual Studio Code Marketplace, GitHub Marketplace, and Google Cloud Marketplace. Each provider card includes a direct catalog link and official documentation. These are outbound discovery links only; extension installation, account authorization, purchasing, and synchronization are not implemented until provider APIs and credentials are configured. Marketplace is also available from Home quick access.
 
 
-## GitHub Authentication backend
+## GitHub Authentication
 
-The CLI Hub now includes a GitHub login dialog with OAuth redirect, PAT connection, session status, logout, and credential disconnect. The frontend calls the configurable `window.OCODE_AUTH_API` endpoint, defaulting to `https://auth.ocodejs.dev`; it sends credentials only over HTTPS and does not persist PAT values in browser storage. The separate Node.js service in `auth-server/` uses PostgreSQL, AES-256-GCM encrypted credentials, opaque server-side sessions, HttpOnly cookies, CSRF validation, exact-origin CORS, rate limits, and generic error responses. See `auth-server/README.md` and `auth-server/.env.example`. **The backend is not deployed yet**, so real login remains unavailable until an HTTPS auth service, PostgreSQL database, GitHub OAuth App, DNS, and production secrets are configured. Never commit `.env` or real credentials.
+The CLI Hub frontend has a GitHub login dialog supporting OAuth, PAT connection, session status, logout and credential disconnect. The default production API is `https://auth.ocodejs.dev`.
+
+The recommended zero-cost deployment uses a **separate Cloudflare Worker + D1 database on the Free plan**, isolated from the existing `ocodejs-cli` static-assets Worker. The Worker source and D1 migration live in `auth-worker/`. It encrypts GitHub credentials with AES-GCM, hashes session/CSRF identifiers with HMAC, uses Secure HttpOnly cookies, exact-origin CORS, OAuth state validation and per-IP rate limits.
+
+The existing Express/PostgreSQL implementation in `auth-server/` is retained as an optional self-hosted alternative. The public frontend does not depend on it.
+
+**Real login is not active until the separate Worker and D1 database are deployed, the `auth.ocodejs.dev` hostname is attached, and a dedicated GitHub OAuth App's client ID/secret are configured as Cloudflare Worker secrets.** PAT connection can be used after the Worker and its encryption/session secrets are configured. Never commit real credentials or put them in frontend code.
+
 
 ## Custom domain: ocodejs.dev
 
