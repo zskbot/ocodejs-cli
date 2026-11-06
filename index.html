@@ -1107,6 +1107,11 @@ footer a{color:#b5c7dd}
 .catalog-retry:hover{background:#000;color:#fff}
 .catalog-error-link{display:block;margin-top:14px;color:#fff;text-decoration:underline;text-underline-offset:4px}
 
+
+/* Community / Trending: equal-size action buttons */
+.community-section .library-links{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important;width:100%;align-items:stretch!important}
+.community-section .library-links .btn{box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-width:0!important;max-width:none!important;height:32px!important;min-height:32px!important;max-height:32px!important;padding:0 6px!important;margin:0!important;font-size:10px!important;line-height:1!important;white-space:nowrap!important;flex:none!important}
+@media(max-width:768px){.community-section .library-links{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px!important}.community-section .library-links .btn{height:30px!important;min-height:30px!important;max-height:30px!important;font-size:10px!important}}
 </style>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" defer></script>
 
